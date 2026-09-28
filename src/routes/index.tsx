@@ -14,7 +14,7 @@ import type { PlanFilters } from "@/lib/plans";
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): { plan?: string } =>
-    typeof s.plan === "string" ? { plan: s.plan } : {},
+    typeof s["plan"] === "string" ? { plan: s["plan"] } : {},
   head: () => ({
     meta: [
       { title: "UniPath 启程留学 · 智能选校匹配" },
