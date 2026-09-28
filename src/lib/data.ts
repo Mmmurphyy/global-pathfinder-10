@@ -191,7 +191,7 @@ export interface PgInput {
 export function normalizeUg(i: UgInput): number {
   switch (i.curriculum) {
     case "gaokao":
-      return Math.min(100, (i.gaokao / 750) * 100 + 12);
+      return Math.min(100, (i.gaokao / 750) * 100 + 4);
     case "alevel":
       return i.alevel.reduce((a, g) => a + ALEVEL_PTS[g]!, 0) / i.alevel.length;
     case "ib":
