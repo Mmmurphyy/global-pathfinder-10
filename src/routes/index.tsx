@@ -1,6 +1,6 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
-import { Sparkles } from "lucide-react";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useMemo, useState } from "react";
+import { Save, Sparkles } from "lucide-react";
 import {
   ALEVEL_GRADES, CURRICULA, DSE_GRADES, MAJORS, PROGRAMS, REGIONS,
   classify, normalizePg, normalizeUg,
@@ -8,8 +8,13 @@ import {
 } from "@/lib/data";
 import { ProgramCard } from "@/components/ProgramCard";
 import { cn } from "@/lib/utils";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/store";
+import type { PlanFilters } from "@/lib/plans";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (s: Record<string, unknown>): { plan?: string } =>
+    typeof s.plan === "string" ? { plan: s.plan } : {},
   head: () => ({
     meta: [
       { title: "UniPath 启程留学 · 智能选校匹配" },
@@ -86,6 +91,33 @@ function Index() {
 
   const total = results.Reach.length + results.Target.length + results.Safety.length;
   const toggleRegion = (r: Region) => setRegions((rs) => (rs.includes(r) ? rs.filter((x) => x !== r) : [...rs, r]));
+
+  const { plan } = Route.useSearch();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [notice, setNotice] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!plan || !user) return;
+    supabase.from("plans").select("name, filters").eq("id", plan).maybeSingle().then(({ data }) => {
+      if (!data) return;
+      const f = data.filters as unknown as PlanFilters;
+      setLevel(f.level); setRegions(f.regions); setMajor(f.major); setTrack(f.track);
+      setCurriculum(f.curriculum); setGaokao(f.gaokao); setAlevel(f.alevel); setIb(f.ib);
+      setAp(f.ap); setDse(f.dse); setPg(f.pg); setIelts(f.ielts);
+      setNotice(`已加载方案「${data.name}」并重新匹配`);
+    });
+  }, [plan, user]);
+
+  async function savePlan() {
+    if (!user) { navigate({ to: "/auth" }); return; }
+    const name = prompt("为这个申请方案命名：", `${MAJORS.find((m) => m.id === major)!.en} · ${new Date().toLocaleDateString("zh-CN")}`);
+    if (!name?.trim()) return;
+    const filters: PlanFilters = { level, regions, major, track, curriculum, gaokao, alevel, ib, ap, dse, pg, ielts };
+    const summary = { reach: results.Reach.length, target: results.Target.length, safety: results.Safety.length, score };
+    const { error } = await supabase.from("plans").insert({ name: name.trim(), filters: filters as never, summary: summary as never });
+    setNotice(error ? `保存失败：${error.message}` : `方案「${name.trim()}」已保存，可在“我的方案”中回看`);
+  }
 
   return (
     <div>
@@ -211,12 +243,21 @@ function Index() {
                 {MAJORS.find((m) => m.id === major)!.en} · {track} · 共 {total} 个项目
               </p>
             </div>
-            <div className="flex gap-1.5">
+            <div className="flex flex-wrap gap-1.5">
               {(["All", "Reach", "Target", "Safety"] as const).map((t) => (
                 <Chip key={t} active={tierFilter === t} onClick={() => setTierFilter(t)}>{t === "All" ? "全部" : t}</Chip>
               ))}
+              <button onClick={savePlan} title={user ? "" : "登录后可保存"} className="flex items-center gap-1.5 rounded-md bg-gold px-3 py-1.5 text-sm font-semibold text-gold-foreground">
+                <Save className="h-4 w-4" /> 保存方案
+              </button>
             </div>
           </div>
+          {notice && (
+            <div className="mb-5 flex items-center justify-between rounded-lg border border-border bg-muted px-4 py-2 text-sm">
+              {notice}
+              <button onClick={() => setNotice(null)} className="text-muted-foreground">✕</button>
+            </div>
+          )}
 
           {total === 0 && (
             <div className="rounded-xl border border-dashed border-border p-12 text-center text-muted-foreground">
