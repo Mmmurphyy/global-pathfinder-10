@@ -29,7 +29,7 @@ function MentorPage() {
   const { id } = Route.useParams();
   const m = buildMentor(id);
   const major = MAJORS.find((x) => x.id === m.major)!;
-  const [service, setService] = useState(SERVICES[1]);
+  const [service, setService] = useState(SERVICES[1]!);
   const days = useMemo(
     () => Array.from({ length: 6 }, (_, i) => {
       const d = new Date();
@@ -210,7 +210,7 @@ function MentorPage() {
                 <p className="mt-2 font-serif text-xl font-bold">¥{service.price}</p>
               </div>
               <div className="grid grid-cols-2 gap-2">
-                {[["wechat", "微信支付"], ["alipay", "支付宝"]].map(([k, l]) => (
+                {([["wechat", "微信支付"], ["alipay", "支付宝"]] as const).map(([k, l]) => (
                   <button key={k} onClick={() => setMethod(k)} className={cn("rounded-md border py-3 text-sm", method === k ? "border-primary ring-1 ring-primary" : "border-border")}>{l}</button>
                 ))}
               </div>
