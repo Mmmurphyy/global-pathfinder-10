@@ -136,22 +136,22 @@ export function mentorsForProgram(p: Program): Mentor[] {
 
 export function buildMentor(id: string): Mentor | never {
   const [uniId, major, level] = id.split("-") as [string, Major, Level, string];
-  const uni = UNIVERSITIES.find((u) => u.id === uniId) ?? UNIVERSITIES[0];
+  const uni = UNIVERSITIES.find((u) => u.id === uniId) ?? UNIVERSITIES[0]!;
   const h = hash(id);
   const bgs = level === "pg" ? BACKGROUNDS_PG : BACKGROUNDS_UG;
-  const m = MAJORS.find((x) => x.id === major) ?? MAJORS[0];
+  const m = MAJORS.find((x) => x.id === major) ?? MAJORS[0]!;
   return {
     id,
-    name: SURNAMES[h % 12] + GIVEN[(h >> 4) % 12],
+    name: SURNAMES[h % 12]! + GIVEN[(h >> 4) % 12]!,
     uni,
     major: m.id,
     level: level ?? "ug",
-    year: level === "pg" ? "研一在读" : ["大一在读", "大二在读", "大三在读"][h % 3],
-    background: bgs[h % bgs.length],
+    year: level === "pg" ? "研一在读" : ["大一在读", "大二在读", "大三在读"][h % 3]!,
+    background: bgs[h % bgs.length]!,
     rating: 4.6 + ((h >> 8) % 5) / 10,
     sessions: 40 + ((h >> 3) % 280),
-    bio: `目前就读于${uni.name} ${m.en} 方向（${m.tracks[h % 4]}）。当年以 ${bgs[h % bgs.length]} 的背景获得录取，熟悉${uni.region === "HK" ? "港校面试" : "海外申请"}全流程，擅长选校定位与文书打磨。`,
-    tags: [m.tracks[h % 4], uni.region === "HK" ? "面试辅导" : "文书写作", "选校定位"],
+    bio: `目前就读于${uni.name} ${m.en} 方向（${m.tracks[h % 4]!}）。当年以 ${bgs[h % bgs.length]} 的背景获得录取，熟悉${uni.region === "HK" ? "港校面试" : "海外申请"}全流程，擅长选校定位与文书打磨。`,
+    tags: [m.tracks[h % 4]!, uni.region === "HK" ? "面试辅导" : "文书写作", "选校定位"],
   };
 }
 
@@ -193,13 +193,13 @@ export function normalizeUg(i: UgInput): number {
     case "gaokao":
       return Math.min(100, (i.gaokao / 750) * 100 + 12);
     case "alevel":
-      return i.alevel.reduce((a, g) => a + ALEVEL_PTS[g], 0) / i.alevel.length;
+      return i.alevel.reduce((a, g) => a + ALEVEL_PTS[g]!, 0) / i.alevel.length;
     case "ib":
       return Math.min(100, (i.ib / 45) * 100 + 4);
     case "ap":
       return Math.min(100, (i.ap / 5) * 100 - 2);
     case "hkdse":
-      return Math.min(100, (i.dse.reduce((a, g) => a + DSE_PTS[g], 0) / 35) * 100 + 8);
+      return Math.min(100, (i.dse.reduce((a, g) => a + DSE_PTS[g]!, 0) / 35) * 100 + 8);
   }
 }
 

@@ -58,7 +58,7 @@ function MentorPage() {
   const [method, setMethod] = useState("wechat");
   const needsSlot = service.mins > 0;
   const canBook = !needsSlot || slot;
-  const dateLabel = `${days[day].getMonth() + 1}月${days[day].getDate()}日`;
+  const dateLabel = `${days[day]!.getMonth() + 1}月${days[day]!.getDate()}日`;
   const pay = () => {
     setPayStep(2);
     setTimeout(() => setPayStep(3), 1600);

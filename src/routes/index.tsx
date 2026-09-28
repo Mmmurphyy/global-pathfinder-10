@@ -58,7 +58,7 @@ function Index() {
   const [level, setLevel] = useState<Level>("ug");
   const [regions, setRegions] = useState<Region[]>(["HK", "UK"]);
   const [major, setMajor] = useState<Major>("CS");
-  const [track, setTrack] = useState(MAJORS[1].tracks[0]);
+  const [track, setTrack] = useState(MAJORS[1]!.tracks[0]!);
   const [curriculum, setCurriculum] = useState<Curriculum>("gaokao");
   const [gaokao, setGaokao] = useState(620);
   const [alevel, setAlevel] = useState(["A*", "A", "A"]);
@@ -124,7 +124,7 @@ function Index() {
           <Field label="专业大类与方向">
             <div className="grid grid-cols-2 gap-2">
               {MAJORS.map((m) => (
-                <Chip key={m.id} active={major === m.id} onClick={() => { setMajor(m.id); setTrack(m.tracks[0]); }}>
+                <Chip key={m.id} active={major === m.id} onClick={() => { setMajor(m.id); setTrack(m.tracks[0]!); }}>
                   <span className="block text-xs leading-tight">{m.en}</span>
                 </Chip>
               ))}
