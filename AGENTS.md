@@ -8,3 +8,6 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+## Architecture
+- Prototype is frontend-only with mock data in src/lib/data.ts; favorites persist in localStorage via src/lib/store.ts. Why: interactive prototype, no backend needed yet.
