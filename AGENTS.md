@@ -10,4 +10,4 @@
 <!-- LOVABLE:END -->
 
 ## Architecture
-- Prototype is frontend-only with mock data in src/lib/data.ts; favorites persist in localStorage via src/lib/store.ts. Why: interactive prototype, no backend needed yet.
+- Auth + data on Lovable Cloud: favorites and plans tables (RLS per user), accessed from browser client in src/lib/store.ts and routes. Why: simple per-user CRUD, RLS enforces ownership.
