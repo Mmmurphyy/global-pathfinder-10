@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { X } from "lucide-react";
 import { getProgram, MAJORS, REGIONS } from "@/lib/data";
-import { toggleFav, useFavs } from "@/lib/store";
+import { toggleFav, useAuth, useFavs } from "@/lib/store";
 
 export const Route = createFileRoute("/compare")({
   head: () => ({
@@ -19,7 +19,17 @@ export const Route = createFileRoute("/compare")({
 
 function Compare() {
   const favs = useFavs();
+  const { user, ready } = useAuth();
   const items = favs.map(getProgram).filter((p): p is NonNullable<typeof p> => !!p);
+
+  if (ready && !user)
+    return (
+      <div className="mx-auto max-w-md px-4 py-20 text-center">
+        <h1 className="font-serif text-2xl font-bold">收藏与对比</h1>
+        <p className="mt-2 text-sm text-muted-foreground">登录后即可收藏院校并在任意设备上对比。</p>
+        <Link to="/auth" className="mt-6 inline-block rounded-md bg-primary px-5 py-2 text-sm text-primary-foreground">登录 / 注册</Link>
+      </div>
+    );
 
   const rows: [string, (p: (typeof items)[number]) => string][] = [
     ["地区", (p) => REGIONS.find((r) => r.id === p.uni.region)!.label],

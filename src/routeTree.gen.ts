@@ -10,7 +10,9 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as CompareRouteImport } from './routes/compare'
+import { Route as PlansRouteImport } from './routes/plans'
 import { Route as MentorsIdRouteImport } from './routes/mentors.$id'
 
 const IndexRoute = IndexRouteImport.update({
@@ -18,9 +20,19 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CompareRoute = CompareRouteImport.update({
   id: '/compare',
   path: '/compare',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlansRoute = PlansRouteImport.update({
+  id: '/plans',
+  path: '/plans',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MentorsIdRoute = MentorsIdRouteImport.update({
@@ -31,31 +43,39 @@ const MentorsIdRoute = MentorsIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/plans': typeof PlansRoute
   '/mentors/$id': typeof MentorsIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/plans': typeof PlansRoute
   '/mentors/$id': typeof MentorsIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/compare': typeof CompareRoute
+  '/plans': typeof PlansRoute
   '/mentors/$id': typeof MentorsIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/compare' | '/mentors/$id'
+  fullPaths: '/' | '/auth' | '/compare' | '/plans' | '/mentors/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/compare' | '/mentors/$id'
-  id: '__root__' | '/' | '/compare' | '/mentors/$id'
+  to: '/' | '/auth' | '/compare' | '/plans' | '/mentors/$id'
+  id: '__root__' | '/' | '/auth' | '/compare' | '/plans' | '/mentors/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   CompareRoute: typeof CompareRoute
+  PlansRoute: typeof PlansRoute
   MentorsIdRoute: typeof MentorsIdRoute
 }
 
@@ -68,11 +88,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/compare': {
       id: '/compare'
       path: '/compare'
       fullPath: '/compare'
       preLoaderRoute: typeof CompareRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/plans': {
+      id: '/plans'
+      path: '/plans'
+      fullPath: '/plans'
+      preLoaderRoute: typeof PlansRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/mentors/$id': {
@@ -87,7 +121,9 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   CompareRoute: CompareRoute,
+  PlansRoute: PlansRoute,
   MentorsIdRoute: MentorsIdRoute,
 }
 export const routeTree = rootRouteImport

@@ -1,4 +1,4 @@
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { BadgeCheck, Heart, Star } from "lucide-react";
 import { mentorsForProgram, MAJORS, type Program, type Tier } from "@/lib/data";
 import { toggleFav, useFavs } from "@/lib/store";
@@ -12,6 +12,7 @@ const TIER_STYLE: Record<Tier, string> = {
 
 export function ProgramCard({ p, tier, gaokaoMode }: { p: Program; tier: Tier; gaokaoMode: boolean }) {
   const favs = useFavs();
+  const navigate = useNavigate();
   const fav = favs.includes(p.id);
   const mentors = mentorsForProgram(p);
   const major = MAJORS.find((m) => m.id === p.major)!;
@@ -25,7 +26,8 @@ export function ProgramCard({ p, tier, gaokaoMode }: { p: Program; tier: Tier; g
         </div>
         <button
           aria-label="收藏"
-          onClick={() => toggleFav(p.id)}
+          title="收藏（需登录）"
+          onClick={async () => { if (!(await toggleFav(p.id))) navigate({ to: "/auth" }); }}
           className={cn("rounded-full border p-2 transition", fav ? "border-reach bg-reach/10 text-reach" : "border-border text-muted-foreground hover:text-reach")}
         >
           <Heart className={cn("h-4 w-4", fav && "fill-current")} />
