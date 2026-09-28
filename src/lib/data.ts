@@ -142,14 +142,14 @@ export function buildMentor(id: string): Mentor | never {
   const m = MAJORS.find((x) => x.id === major) ?? MAJORS[0]!;
   return {
     id,
-    name: SURNAMES[h % 12]! + GIVEN[(h >> 4) % 12]!,
+    name: SURNAMES[h % 12]! + GIVEN[(h >>> 4) % 12]!,
     uni,
     major: m.id,
     level: level ?? "ug",
     year: level === "pg" ? "研一在读" : ["大一在读", "大二在读", "大三在读"][h % 3]!,
     background: bgs[h % bgs.length]!,
-    rating: 4.6 + ((h >> 8) % 5) / 10,
-    sessions: 40 + ((h >> 3) % 280),
+    rating: 4.6 + ((h >>> 8) % 5) / 10,
+    sessions: 40 + ((h >>> 3) % 280),
     bio: `目前就读于${uni.name} ${m.en} 方向（${m.tracks[h % 4]!}）。当年以 ${bgs[h % bgs.length]} 的背景获得录取，熟悉${uni.region === "HK" ? "港校面试" : "海外申请"}全流程，擅长选校定位与文书打磨。`,
     tags: [m.tracks[h % 4]!, uni.region === "HK" ? "面试辅导" : "文书写作", "选校定位"],
   };

@@ -65,10 +65,10 @@ export function ProgramCard({ p, tier, gaokaoMode }: { p: Program; tier: Tier; g
             >
               <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary font-serif text-sm text-primary-foreground">{m.name[0]}</span>
               <div className="min-w-0 flex-1">
-                <p className="flex items-center gap-1 text-sm font-medium">
+                <p className="flex items-center gap-1 whitespace-nowrap text-sm font-medium">
                   {m.name}
                   <BadgeCheck className="h-3.5 w-3.5 text-gold" />
-                  <span className="text-[10px] font-normal text-muted-foreground">官方认证 · {m.year}</span>
+                  <span className="truncate text-[10px] font-normal text-muted-foreground">认证 · {m.year}</span>
                 </p>
                 <p className="truncate text-[11px] text-muted-foreground">录取背景：{m.background}</p>
               </div>

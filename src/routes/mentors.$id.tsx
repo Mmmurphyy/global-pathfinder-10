@@ -78,7 +78,7 @@ function MentorPage() {
             <div className="px-6 pb-6">
               <div className="-mt-10 flex flex-wrap items-end gap-4">
                 <span className="flex h-20 w-20 items-center justify-center rounded-full border-4 border-card bg-primary font-serif text-3xl text-primary-foreground">{m.name[0]}</span>
-                <div className="pb-1">
+                <div className="pt-12">
                   <h1 className="flex items-center gap-2 font-serif text-2xl font-bold">{m.name}</h1>
                   <p className="text-sm text-muted-foreground">{m.uni.name} · {major.en} · {m.year}</p>
                 </div>
