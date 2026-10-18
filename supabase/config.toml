@@ -1,1 +1,4 @@
 project_id = "vxpxzkuhlcpwtwyrfpki"
+
+[functions.program-summary]
+verify_jwt = true

@@ -1,4 +1,4 @@
-import type { Curriculum, Level, Major, PgInput, Region } from "@/lib/data";
+import type { ALevelSubject, Curriculum, Level, Major, PgInput, Region } from "@/lib/data";
 
 export type PlanFilters = {
   level: Level;
@@ -8,6 +8,9 @@ export type PlanFilters = {
   curriculum: Curriculum;
   gaokao: number;
   alevel: string[];
+  alevelSubjects?: ALevelSubject[];
+  personalStatement?: "typical" | "strong";
+  supercurricular?: "none" | "some" | "strong";
   ib: number;
   ap: number;
   dse: string[];
